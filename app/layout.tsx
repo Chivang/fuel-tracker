@@ -5,7 +5,7 @@ import "./globals.css";
 // ຕັ້ງຄ່າຟອນ Phetsarath
 const phetsarath = Phetsarath({
   weight: ["400", "700"], // ໂຫລດທັງແບບຕົວທຳມະດາ ແລະ ຕົວເຂັ້ມ
-  subsets: ["latin"],     // ມາດຕະຖານ Next.js
+  subsets: ["lao"],     // ມາດຕະຖານ Next.js
   display: "swap",        // ຊ່ວຍໃຫ້ຕົວໜັງສືຂຶ້ນໄວ ໂດຍບໍ່ຕ້ອງລໍຖ້າຟອນໂຫລດດົນ
 });
 

@@ -3,13 +3,24 @@ import { useEffect, useState, useRef } from 'react'
 import { supabase } from '../lib/supabase'
 import dynamic from 'next/dynamic'
 import 'leaflet/dist/leaflet.css'
+import { decodeFormState, formatDistance, formatDistanceToNow } from 'date-fns';
+import {lo} from 'date-fns/locale';
 
 // 1. ໂຫຼດ Components ແບບ SSR: False
 const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), { ssr: false })
 const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), { ssr: false })
 const Marker = dynamic(() => import('react-leaflet').then((mod) => mod.Marker), { ssr: false })
 const Popup = dynamic(() => import('react-leaflet').then((mod) => mod.Popup), { ssr: false })
-
+const formatDateTime = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleString('lo-LA', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};
 export default function Home() {
   // --- [Hook Section] ປະກາດ Hook ທັງໝົດໄວ້ເທິງສຸດ ຫ້າມມີ IF ຂັ້ນກາງ ---
   const [stations, setStations] = useState<any[]>([])
@@ -132,6 +143,7 @@ return (
                 <div className="p-1 min-w-[180px] text-slate-800">
                   <h3 className="font-bold text-blue-700 text-lg">{station.name}</h3>
                   <p className="text-sm opacity-70 mb-2">{station.brand}</p>
+                  <p className="text-xs text-gray-500 mb-2 italic">ອັບເດດລ່າສຸດ: {formatDistanceToNow(new Date(station.updated_at), { addSuffix: true, locale: lo })}</p>
                   <div className="bg-slate-50 p-2 rounded-md border border-slate-200 text-center uppercase text-[10px] font-bold tracking-wider mb-2">Update status</div>
                   <div className="flex gap-2">
                       <button onClick={() => updateStatus(station.id, 'available')} className={`flex-1 py-1.5 rounded text-[10px] font-bold transition-all ${station.status === 'available' ? 'bg-green-600 text-white shadow-md' : 'bg-white border border-green-600 text-green-600'}`}>
